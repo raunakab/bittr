@@ -27,3 +27,6 @@ frontend/yarn-error.log*
 # BACKEND
 backend/target
 backend/Cargo.lock
+
+# BACKEND2
+backend2/
