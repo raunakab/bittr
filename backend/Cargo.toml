@@ -1,13 +1,38 @@
 [package]
-name = "backend"
+name = "Luo"
 version = "0.1.0"
 authors = ["raunakab <rabhagat31@gmail.com>"]
 edition = "2018"
+license = "Apache License 2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "3"
+
+# actix
+# usage: web framwork
+actix = "0.10.0"
+actix-web = "3.3.2"
 actix-cors = "0.5.4"
-serde = "1.0.123"
-uuid = { version = "0.8", features = ["serde", "v4"] }
+
+# serde
+# usage: serializing and deserializing http responses
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# uuid
+# usage: TODO!
+uuid = { version = "0.8.2", features = ["v4", "serde"] }
+
+# diesel
+# usage: ORM for PostgreSQL
+diesel = { version = "1.4.5", features = ["r2d2", "postgres", "uuidv07"] }
+diesel_migrations = "1.4.0"
+
+# dotenv
+# usage: TODO!
+dotenv = "0.15.0"
+
+# derive_more
+# usage: TODO!
+derive_more = "0.99.2"

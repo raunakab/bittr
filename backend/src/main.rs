@@ -1,5 +1,13 @@
 #![allow(unused)]
 
+// external crates
+extern crate actix;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_migrations;
+
+// external uses
 use actix_web::{
     get,
     web,
@@ -15,6 +23,11 @@ use serde::{
     Deserialize,
 };
 use uuid::Uuid;
+
+// internal crates
+mod db_actor;
+mod schema;
+mod models;
 
 #[derive(Serialize)]
 pub struct AuthKey {
