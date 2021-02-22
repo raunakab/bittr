@@ -23,7 +23,7 @@ function App() {
 	};
 
 	const getAuthKey = async () => {
-		let data = await axios.get('http://localhost:5000/', {
+		let data = await axios.get('http://localhost:5000/users', {
 			params: {
 				username: username,
 				password: password,

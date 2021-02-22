@@ -7,9 +7,26 @@ use actix_web::{
     HttpServer,
     Responder,
     web::Query,
+    HttpResponse,
 };
 use actix_cors::Cors;
-use serde::{Deserialize};
+use serde::{
+    Serialize,
+    Deserialize,
+};
+use uuid::Uuid;
+
+#[derive(Serialize)]
+pub struct AuthKey {
+    authkey: Uuid,
+}
+impl AuthKey {
+    pub fn new() -> Self {
+        return AuthKey {
+            authkey: Uuid::new_v4(),
+        };
+    }
+}
 
 #[derive(Deserialize)]
 pub struct UPPair {
@@ -17,9 +34,33 @@ pub struct UPPair {
     password: String,
 }
 
-#[get("/")]
+
+fn in_users(uppair: UPPair) -> bool {
+    let user1: UPPair = UPPair {
+        username: String::from("pbhagat"),
+        password: String::from("prasad2205"),
+    };
+    let users: Vec<UPPair> = vec![user1];
+
+    for pair in users.iter() {
+        if pair.username == uppair.username && pair.password == uppair.password {
+            return true;
+        }
+    }
+    return false;
+}
+
+#[get("/users")]
 async fn index(web::Query(info): web::Query<UPPair>) -> impl Responder {
-    return format!("Hello! {}, {}", info.username, info.password);
+    if in_users(info) {
+        return HttpResponse::Ok()
+            .content_type("application/json")
+            .json(AuthKey::new());
+    } else {
+        return HttpResponse::Unauthorized()
+            .content_type("application/json")
+            .json("something went wrong");
+    }
 }
 
 #[actix_web::main]
