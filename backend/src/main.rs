@@ -28,6 +28,7 @@ use uuid::Uuid;
 mod db_actor;
 mod schema;
 mod models;
+mod messages;
 
 #[derive(Serialize)]
 pub struct AuthKey {
