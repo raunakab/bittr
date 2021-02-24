@@ -29,10 +29,22 @@ pub struct CreateMessage {
     pub last_name: String,
 }
 
+impl CreateMessage {
+    pub fn new(first_name: String, last_name: String) -> Self {
+        return CreateMessage { first_name, last_name, };
+    }
+}
+
 #[derive(Message)]
 #[rtype(result="QueryResult<User>")]
 pub struct RetrieveMessage {
     pub id: Uuid,
+}
+
+impl RetrieveMessage {
+    pub fn new(id: Uuid) -> Self {
+        return RetrieveMessage { id, };
+    }
 }
 
 #[derive(Message)]
@@ -43,8 +55,20 @@ pub struct UpdateMessage {
     pub last_name: String,
 }
 
+impl UpdateMessage {
+    pub fn new(id: Uuid, first_name: String, last_name: String) -> Self {
+        return UpdateMessage { id, first_name, last_name, };
+    }
+}
+
 #[derive(Message)]
 #[rtype(result="QueryResult<User>")]
 pub struct DeleteMessage {
     pub id: Uuid,
+}
+
+impl DeleteMessage {
+    pub fn new(id: Uuid) -> Self {
+        return DeleteMessage { id, };
+    }
 }

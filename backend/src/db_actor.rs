@@ -16,7 +16,6 @@ use diesel::{
     PgConnection,
 };
 use uuid::Uuid;
-// use r2d2::Error;
 
 // internal uses
 use crate::models::{
@@ -31,6 +30,10 @@ pub struct DbActor {
 }
 
 impl DbActor {
+    pub fn new(conn: Pool<ConnectionManager<PgConnection>>) -> Self {
+        return DbActor { conn, };
+    }
+
     pub fn get_connection(self: &mut Self) -> PooledConnection<ConnectionManager<PgConnection>> {
         return self.conn
             .get()
@@ -62,23 +65,17 @@ impl Handler<RetrieveMessage> for DbActor {
     fn handle(&mut self, msg: RetrieveMessage, _: &mut Self::Context) -> Self::Result {
         let conn = self.get_connection();
 
-        // match users::dsl::users.filter(users::dsl::id.eq(msg.id)).load::<User>(&conn) {
-        //     Ok(vec) => {
-        //         if vec.len() == 1usize {
-        //             return vec.get(0);
-        //         }
-        //     },
-        //     Err(err) => {},
-        // };
-
-        // todo!();
-
         match users::dsl::users.filter(users::dsl::id.eq(msg.id)).load::<User>(&conn) {
-            Ok(vec) => {},
-            Err(err) => {},
-        };
+            Ok(vec) => {
+                if vec.len() > 1 { panic!(); }
 
-        todo!();
+                match vec.get(0) {
+                    Some(user) => { return Ok(user.clone()); },
+                    None => { return Err(diesel::result::Error::NotFound); },
+                }
+            },
+            Err(err) => { return Err(err); },
+        };
     }
 }
 
@@ -91,9 +88,21 @@ impl Handler<UpdateMessage> for DbActor {
         return diesel::update(users::dsl::users)
             .filter(users::dsl::id.eq(msg.id))
             .set((
-                users::dsl::first_name.eq(msg.first_name),
-                users::dsl::last_name.eq(msg.last_name),
+                users::dsl::username.eq(msg.first_name),
+                users::dsl::passwd.eq(msg.last_name),
             ))
+            .get_result::<User>(&conn);
+    }
+}
+
+impl Handler<DeleteMessage> for DbActor {
+    type Result = QueryResult<User>;
+
+    fn handle(&mut self, msg: DeleteMessage, _: &mut Self::Context) -> Self::Result {
+        let conn = self.get_connection();
+
+        return diesel::delete(users::dsl::users)
+            .filter(users::dsl::id.eq(msg.id))
             .get_result::<User>(&conn);
     }
 }

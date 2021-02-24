@@ -17,24 +17,24 @@ use crate::schema::users;
 #[derive(Debug, Clone, Queryable, Serialize, Deserialize)]
 pub struct User {
     pub id: Uuid,
-    pub first_name: String,
-    pub last_name: String,
+    pub username: String,
+    pub passwd: String,
 }
 
 #[derive(Debug, Clone, Insertable, Serialize, Deserialize)]
 #[table_name="users"]
 pub struct NewUser {
     id: Uuid,
-    first_name: String,
-    last_name: String
+    username: String,
+    passwd: String
 }
 
 impl NewUser {
-    pub fn new(first_name: String, last_name: String) -> Self {
+    pub fn new(username: String, passwd: String) -> Self {
         return NewUser {
             id: Uuid::new_v4(),
-            first_name: first_name,
-            last_name: last_name,
+            username,
+            passwd,
         };
     }
 }
