@@ -111,6 +111,7 @@ async fn main() -> std::io::Result<()> {
             .service(services::users::create_user)
             .service(services::users::id::get_user)
             .service(services::users::id::put_user)
+            .service(services::users::id::delete_user)
             .data(AppState::new(db_addr.clone()));
     })
         .bind("127.0.0.1:5000")?

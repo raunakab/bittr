@@ -4,6 +4,7 @@
 use actix_web::{
     get,
     put,
+    delete,
     web::{
         Path,
         Json,
@@ -70,6 +71,7 @@ pub(in self) mod output {
 use crate::messages::{
     retrieve::Retrieve,
     update::Update,
+    delete::Delete,
 };
 use crate::app::app_state::AppState;
 use input::{
@@ -102,9 +104,9 @@ pub async fn get_user(Path(user_id): Path<Id>, app_state: Data<AppState>) -> imp
 }
 
 #[put("/users/{id}")]
-pub async fn put_user(Path(user_id): Path<Id>, json: Json<NewUserInfo>, app_state: Data<AppState>) -> impl Responder {
+pub async fn put_user(Path(id): Path<Id>, json: Json<NewUserInfo>, app_state: Data<AppState>) -> impl Responder {
     let new_user_info = json.into_inner();
-    let update_message = Update::new(user_id.id, new_user_info.new_username, new_user_info.new_passwd);
+    let update_message = Update::new(id.id, new_user_info.new_username, new_user_info.new_passwd);
     let db = &app_state.as_ref().db;
 
     match db.send(update_message).await {
@@ -124,4 +126,28 @@ pub async fn put_user(Path(user_id): Path<Id>, json: Json<NewUserInfo>, app_stat
                 .json(format!("{}", err));
         },
     };
+}
+
+#[delete("/users/{id}")]
+pub async fn delete_user(Path(id): Path<Id>, app_state: Data<AppState>) -> impl Responder {
+    let delete_message = Delete::new(id.id);
+    let db = &app_state.as_ref().db;
+
+    match db.send(delete_message).await {
+        Ok(Ok(_)) => {
+            return HttpResponse::Ok()
+                .content_type("application/json")
+                .json(format!("deleted user: {}", id.id));
+        },
+        Ok(Err(err)) => {
+            return HttpResponse::InternalServerError()
+                .content_type("application/json")
+                .json(format!("{}", err));
+        },
+        Err(err) => {
+            return HttpResponse::InternalServerError()
+                .content_type("application/json")
+                .json(format!("{}", err));
+        }
+    }
 }
