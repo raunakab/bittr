@@ -107,6 +107,7 @@ async fn main() -> std::io::Result<()> {
     return HttpServer::new(move || {
         return App::new()
             .wrap(Cors::permissive())
+            .service(services::index)
             .service(services::users::create_user)
             .service(services::users::get_user)
             .data(AppState::new(db_addr.clone()));
