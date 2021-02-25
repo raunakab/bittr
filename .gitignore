@@ -1,5 +1,4 @@
 # FRONTEND
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -25,11 +24,10 @@ frontend/yarn-debug.log*
 frontend/yarn-error.log*
 
 # BACKEND
+# cargo stuff
 backend/target
 backend/Cargo.lock
 
-# BACKEND2
-backend2/
-
 # DESIGN
+# design swabs and templates
 luo_designs.pages

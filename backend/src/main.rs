@@ -1,34 +1,19 @@
-#![allow(unused)]
-
-// external crates
+/* external crates */
 extern crate actix;
 #[macro_use]
 extern crate diesel;
-#[macro_use]
-extern crate diesel_migrations;
+// #[macro_use]
+// extern crate diesel_migrations;
 
-// external uses
+/* external uses */
 use std::env;
 use actix::SyncArbiter;
 use actix_web::{
-    get,
-    put,
-    web,
-    App,
     HttpServer,
-    Responder,
-    web::{
-        Query,
-        Json,
-        Path,
-    },
-    HttpResponse,
+    App,
 };
 use actix_cors::Cors;
-use serde::{
-    Serialize,
-    Deserialize,
-};
+use serde::Serialize;
 use uuid::Uuid;
 use dotenv::dotenv;
 use diesel::{
@@ -39,19 +24,17 @@ use diesel::{
     prelude::*,
 };
 
-// internal crates
-mod db_actor;
+/* internal crates */
+mod actor;
 mod schema;
 mod models;
 mod messages;
 mod services;
-mod app_state;
+mod app;
 
-// internal uses
-use crate::db_actor::DbActor;
-use crate::app_state::AppState;
-use crate::services::*;
-use crate::models::*;
+/* internal uses */
+use crate::actor::db_actor::DbActor;
+use crate::app::app_state::AppState;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 
@@ -65,12 +48,6 @@ impl AuthKey {
             authkey: Uuid::new_v4(),
         };
     }
-}
-
-#[derive(Deserialize)]
-pub struct UPPair {
-    username: String,
-    passwd: String,
 }
 
 
@@ -89,7 +66,7 @@ pub struct UPPair {
 //     return false;
 // }
 
-// #[put("/users")]
+// #[get("/users")]
 // async fn index(web::Query(info): web::Query<UPPair>) -> impl Responder {
 //     // if in_users(info) {
 //     //     return HttpResponse::Ok()
@@ -105,30 +82,30 @@ pub struct UPPair {
 //             .json(AuthKey::new());
 // }
 
-#[derive(Deserialize)]
-struct Test {
-    username: String,
-    passwd: String,
-}
+// #[derive(Deserialize)]
+// pub struct Test {
+//     username: String,
+//     passwd: String,
+// }
 
-#[put("/users")]
-async fn index(test: Json<Test>) -> impl Responder {
-    // if in_users(info) {
-    //     return HttpResponse::Ok()
-    //         .content_type("application/json")
-    //         .json(AuthKey::new());
-    // } else {
-    //     return HttpResponse::Unauthorized()
-    //         .content_type("application/json")
-    //         .json("something went wrong");
-    // }
-    // return HttpResponse::Ok()
-    //         .content_type("application/json")
-    //         .json(AuthKey::new());
-    return HttpResponse::Ok()
-        .content_type("application/json")
-        .json(format!("test-stuff-stuff: {}, {}", test.username, test. passwd));
-}
+// #[put("/users")]
+// async fn index(test: Json<Test>) -> impl Responder {
+//     // if in_users(info) {
+//     //     return HttpResponse::Ok()
+//     //         .content_type("application/json")
+//     //         .json(AuthKey::new());
+//     // } else {
+//     //     return HttpResponse::Unauthorized()
+//     //         .content_type("application/json")
+//     //         .json("something went wrong");
+//     // }
+//     // return HttpResponse::Ok()
+//     //         .content_type("application/json")
+//     //         .json(AuthKey::new());
+//     return HttpResponse::Ok()
+//         .content_type("application/json")
+//         .json(format!("test-stuff-stuff: {}, {}", test.username, test.passwd));
+// }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -144,7 +121,8 @@ async fn main() -> std::io::Result<()> {
     return HttpServer::new(move || {
         return App::new()
             .wrap(Cors::permissive())
-            .service(index)
+            .service(services::users::create_user)
+            .service(services::users::get_user)
             .data(AppState::new(db_addr.clone()));
     })
         .bind("127.0.0.1:5000")?
