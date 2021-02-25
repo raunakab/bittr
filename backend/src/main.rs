@@ -2,8 +2,9 @@
 extern crate actix;
 #[macro_use]
 extern crate diesel;
-// #[macro_use]
-// extern crate diesel_migrations;
+#[allow(unused)]
+#[macro_use]
+extern crate diesel_migrations;
 
 /* external uses */
 use std::env;
@@ -13,8 +14,6 @@ use actix_web::{
     App,
 };
 use actix_cors::Cors;
-use serde::Serialize;
-use uuid::Uuid;
 use dotenv::dotenv;
 use diesel::{
     r2d2::{
@@ -26,30 +25,17 @@ use diesel::{
 
 /* internal crates */
 mod actor;
-mod schema;
-mod models;
-mod messages;
-mod services;
 mod app;
+mod messages;
+mod models;
+mod services;
+mod schema;
 
 /* internal uses */
 use crate::actor::db_actor::DbActor;
 use crate::app::app_state::AppState;
 
 pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
-
-#[derive(Serialize)]
-pub struct AuthKey {
-    authkey: Uuid,
-}
-impl AuthKey {
-    pub fn new() -> Self {
-        return AuthKey {
-            authkey: Uuid::new_v4(),
-        };
-    }
-}
-
 
 // fn in_users(uppair: UPPair) -> bool {
 //     let user1: UPPair = UPPair {
