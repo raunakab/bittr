@@ -31,3 +31,7 @@ backend/Cargo.lock
 # DESIGN
 # design swabs and templates
 luo_designs.pages
+
+# MACOS
+# ds_store
+.DS_Store
