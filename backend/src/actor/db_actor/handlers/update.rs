@@ -22,8 +22,8 @@ impl Handler<Update> for DbActor {
         return diesel::update(users::dsl::users)
             .filter(users::dsl::id.eq(msg.id))
             .set((
-                users::dsl::username.eq(msg.first_name),
-                users::dsl::passwd.eq(msg.last_name),
+                users::dsl::username.eq(msg.username),
+                users::dsl::passwd.eq(msg.passwd),
             ))
             .get_result::<QueryableUser>(&conn);
     }

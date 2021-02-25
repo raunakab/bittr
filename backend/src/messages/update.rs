@@ -14,13 +14,13 @@ use crate::models::queryable_user::QueryableUser;
 #[rtype(result="QueryResult<QueryableUser>")]
 pub struct Update {
     pub id: Uuid,
-    pub first_name: String,
-    pub last_name: String,
+    pub username: String,
+    pub passwd: String,
 }
 
 #[allow(unused)]
 impl Update {
-    pub fn new(id: Uuid, first_name: String, last_name: String) -> Self {
-        return Update { id, first_name, last_name, };
+    pub fn new(id: Uuid, username: String, passwd: String) -> Self {
+        return Update { id, username, passwd, };
     }
 }

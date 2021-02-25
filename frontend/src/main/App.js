@@ -23,7 +23,7 @@ function App() {
 	};
 
 	const getAuthKey = async () => {
-		let data = await axios.put('http://localhost:5000/users',
+		let data = await axios.post('http://localhost:5000/users',
 			// params: {
 			// 	username: username,
 			// 	passwd: password,
