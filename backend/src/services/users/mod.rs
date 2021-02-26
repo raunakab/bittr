@@ -75,7 +75,7 @@ pub(in self) mod output {
 
     /* internal uses */
 }
-pub mod id;
+pub mod username;
 
 /* internal uses */
 use crate::messages::create::Create;
