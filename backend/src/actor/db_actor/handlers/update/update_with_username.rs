@@ -8,22 +8,22 @@ use diesel::prelude::*;
 /* internal crates */
 
 /* internal uses */
-use super::super::DbActor;
+use super::super::super::DbActor;
 use crate::models::queryable_user::QueryableUser;
 use crate::schema::users;
-use crate::messages::update::Update;
+use crate::messages::update::update_with_username::UpdateWithUsername;
 
-impl Handler<Update> for DbActor {
+impl Handler<UpdateWithUsername> for DbActor {
     type Result = QueryResult<QueryableUser>;
 
-    fn handle(&mut self, msg: Update, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: UpdateWithUsername, _: &mut Self::Context) -> Self::Result {
         let conn = self.get_connection();
 
         return diesel::update(users::dsl::users)
-            .filter(users::dsl::id.eq(msg.id))
+            .filter(users::dsl::username.eq(msg.username))
             .set((
-                users::dsl::username.eq(msg.username),
-                users::dsl::passwd.eq(msg.passwd),
+                users::dsl::username.eq(msg.new_username),
+                users::dsl::passwd.eq(msg.new_passwd),
             ))
             .get_result::<QueryableUser>(&conn);
     }

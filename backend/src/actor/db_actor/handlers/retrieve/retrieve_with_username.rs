@@ -8,18 +8,18 @@ use diesel::prelude::*;
 /* internal crates */
 
 /* internal uses */
-use super::super::DbActor;
+use super::super::super::DbActor;
 use crate::models::queryable_user::QueryableUser;
 use crate::schema::users;
-use crate::messages::retrieve::Retrieve;
+use crate::messages::retrieve::retrieve_with_username::RetrieveWithUsername;
 
-impl Handler<Retrieve> for DbActor {
+impl Handler<RetrieveWithUsername> for DbActor {
     type Result = QueryResult<QueryableUser>;
 
-    fn handle(&mut self, msg: Retrieve, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: RetrieveWithUsername, _: &mut Self::Context) -> Self::Result {
         let conn = self.get_connection();
 
-        match users::dsl::users.filter(users::dsl::id.eq(msg.id)).load::<QueryableUser>(&conn) {
+        match users::dsl::users.filter(users::dsl::username.eq(msg.username)).load::<QueryableUser>(&conn) {
             Ok(vec) => {
                 if vec.len() > 1 { panic!(); }
 

@@ -12,12 +12,13 @@ use crate::models::queryable_user::QueryableUser;
 
 #[derive(Message)]
 #[rtype(result="QueryResult<QueryableUser>")]
-pub struct Retrieve {
+pub struct DeleteWithUuid {
     pub id: Uuid,
 }
 
-impl Retrieve {
+#[allow(unused)]
+impl DeleteWithUuid {
     pub fn new(id: Uuid) -> Self {
-        return Retrieve { id, };
+        return DeleteWithUuid { id, };
     }
 }

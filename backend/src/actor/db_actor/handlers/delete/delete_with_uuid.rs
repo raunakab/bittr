@@ -8,15 +8,15 @@ use diesel::prelude::*;
 /* internal crates */
 
 /* internal uses */
-use super::super::DbActor;
+use super::super::super::DbActor;
 use crate::models::queryable_user::QueryableUser;
 use crate::schema::users;
-use crate::messages::delete::Delete;
+use crate::messages::delete::delete_with_uuid::DeleteWithUuid;
 
-impl Handler<Delete> for DbActor {
+impl Handler<DeleteWithUuid> for DbActor {
     type Result = QueryResult<QueryableUser>;
 
-    fn handle(&mut self, msg: Delete, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: DeleteWithUuid, _: &mut Self::Context) -> Self::Result {
         let conn = self.get_connection();
 
         return diesel::delete(users::dsl::users)
