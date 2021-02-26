@@ -11,9 +11,9 @@ echo "${HEADER}The following checks will be run:\n\t- cargo build\n\t- cargo tes
 echo "${WARNING}Note: if any of these checks fail, this commit will not be pushed; you can skip these checks by pushing with --no-verify, but please use this sparingly${NC}"
 
 echo "${CHECKS}Building rust binary${NC}"
-cargo build
+cd backend/ && cargo build
 
 echo "${CHECKS}Running tests${NC}"
-cargo test
+cd backend/ && cargo test
 
 echo "${SUCCESS}Building and testing has successfully finished; pushing to central repo${NC}"
