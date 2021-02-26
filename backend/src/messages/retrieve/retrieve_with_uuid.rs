@@ -17,6 +17,7 @@ pub struct RetrieveWithUuid {
 }
 
 impl RetrieveWithUuid {
+    #[allow(unused)]
     pub fn new(id: Uuid) -> Self {
         return RetrieveWithUuid { id, };
     }
