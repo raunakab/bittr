@@ -1,5 +1,1 @@
-#!/bin/sh
-
-echo "asdf"
-
-exit 1
+echo "adsf"
