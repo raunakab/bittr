@@ -33,3 +33,13 @@ A group ledger application.
 * redo:
 
         diesel migration redo
+
+### Useful CURL Commands:
+* put/post:
+
+        curl -X PUT -H "Content-Type: application/json" -d '{"username":"testUser", "passwd":"testPasswd"}' localhost:5000/users
+        curl -X POST -H "Content-Type: application/json" -d '{"new_username":"testUser2", "new_passwd":"testPasswd2"}' localhost:5000/users/testUser
+
+* get:
+
+        curl -X GET localhost:5000/users/testUser2
